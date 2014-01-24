@@ -1,37 +1,37 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vundle
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 开始使用Vundle的必须配置
+"Vundle
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"开始使用Vundle的必须配置
 set nocompatible
 filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
-
-"
 Bundle 'gmarik/vundle'
 
-" airline 美化命令行
+"airline 美化命令行
 Bundle 'bling/vim-airline'
 let g:airline_extensions_tabline_enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'molokai'
 
-" 快速移动
+"快速移动
 Bundle 'Lokaltog/vim-easymotion'
-let g:EasyMotion_leader_key = '<Leader>'
-" let g:EasyMotion_leader_key = 'f'
+"let g:EasyMotion_leader_key = '<Leader>'
+let g:EasyMotion_leader_key = ';'
 
-" NERD 目录浏览器
+"NERD 目录浏览器
 Bundle 'scrooloose/nerdtree'
 map <Leader>o :NERDTreeToggle<CR>
 
-" NERD 注释
+"NERD 注释
 Bundle 'The-NERD-Commenter'
 
-" 查找文件
+"查找文件
 Bundle 'kien/ctrlp.vim'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
 
-"
+"自动生成代码
 Bundle 'UltiSnips'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -41,21 +41,65 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 Bundle 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled=1
 
-" 让代码更加易于纵向排版，以=或,符号对齐
+"让代码更加易于纵向排版，以=或,符号对齐
 Bundle 'Tabular'
 
-"
+"自动闭合括号
 Bundle 'Townk/vim-autoclose'
+let g:AutoClosePairs_del = "`"
 
-" 启动智能补全
+if has('gui_macvim')
+	Bundle 'Rip-Rip/clang_complete'
+	let g:clang_auto_select = 1
+	let g:clang_complete_auto = 1
+endif
+
 filetype plugin indent on
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! HasOS(name)
+	if a:name == "mac"|| a:name == "linux"
+		let uname = system("uname")
+		if a:name == "mac"
+			return uname == "Darwin\n"
+		else
+			return uname == "Linux\n"
+		endif
+	endif
+	return has(a:name)
+endfunction
 
+function! HasGUI()
+	return has("gui_running")
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+source $VIMRUNTIME/mswin.vim
+behave mswin
+" 插入模式输入中文完毕回到普通模式时禁用输入法
+"se imd
+"au InsertEnter * se imd
+"au InsertLeave * se noimd
+"au FocusGained * se imd
+
+"在切换到 normal,insert,search 模式时使用英文输入法
+"set noimdisable
+"set iminsert=1
+"set imsearch=0
+
+"开打文件鼠标自动到上次编辑位置
+if has("autocmd")
+  autocmd BufReadPost *
+  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  \   exe "normal g`\"" |
+  \ endif
+endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 文件设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-source $VIMRUNTIME/mswin.vim
-behave mswin
-
 " 不要备份文件（根据自己需要取舍）
 set nobackup
 set nowb
@@ -64,11 +108,10 @@ set noswapfile
 set whichwrap+=<,>,h,l
 " 自动载入配置文件
 "autocmd! bufwritepost _vimrc source %
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 编码设置
+" windows 下编码设置
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 编码设置,彻底解决中文乱码问题
+"编码设置,彻底解决中文乱码问题
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 if has("win32")
@@ -83,14 +126,15 @@ source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 " 解决consle输出乱码
 language messages zh_CN.utf-8
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 界面
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set shortmess=atI
-set showcmd
 set lines=45
 set columns=120
+"启用鼠标
+if has('mouse')
+  set mouse=a
+endif
 " 键入时隐藏鼠标
 set mousehide
 " 隐藏工具栏
@@ -108,29 +152,28 @@ set rnu
 set lbr
 " 配色方案
 color desert 
-"set guifont=新宋体:h10
-"set gfn=微软雅黑\ Monaco:h12
-"set gfn=Droid\ Sans\ Mono\ for\ Powerline:h10
-set guifont=Droid\ Sans\ Mono\ for\ Powerline:h12
-
-" 高亮当前行
 if has("gui_running")
+	" 高亮当前行
 	set cursorline
-	" hi cursorline guibg=#dddddd
+	if has('win32')
+		set guifont=Droid\ Sans\ Mono\ for\ Powerline:h12
+	elseif has('gui_macvim')
+		set guifont=Droid\ Sans\ Mono\ for\ Powerline:h10
+	else
+		set guifont=Droid\ Sans\ Mono\ for\ Powerline\ 10
+	endif
 endif
 " 总是显示状态栏
 set laststatus=2
-"状态栏颜色
-"hi Statusline guifg=#888888 guibg=white 
-"hi StatuslineNC guifg=Gray guibg=white 
-"highlight Pmenu guifg=black guibg=#cccccc
 "
+set shortmess=atI
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 一般设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "set autoread
 set wildmenu
 " 在状态行显示目前所执行的命令，未完成的指令片段亦会显示出来
+set showcmd
 set history=1024
 " 禁用声音
 set noerrorbells
@@ -148,10 +191,12 @@ set hidden
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "设置行距
 set linespace =1
+" 添加水平滚动条
+"set guioptions+=b
 " 不自动换行
 set nowrap
 " 自动格式化
-set formatoptions=tcrqn
+"set formatoptions=tcrqn
 " 继承前一行的缩进方式，特别适用于多行注释
 set autoindent
 "开启新行时使用智能自动缩进
@@ -169,6 +214,9 @@ set noexpandtab
 set smarttab
 "　设置Tab样式
 "set listchars=tab:>>
+" 设置每行120个字符自动换行
+"set textwidth=120
+"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 搜索和匹配
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -191,28 +239,37 @@ set mat=4
 set hlsearch
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"快捷键设置 
+"快捷键设置 Key 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "leader
+"
 let g:mapleader = ";"
 
 map <F2> :e ~/_vimrc<CR>
 
 "GCC
 if has('gui_macvim')
-	imap <F1> <Esc>:w<CR>:!gcc -std=c99 % -o %< && ./%< <CR>
-	map <F1> <Esc>:w<CR>:!gcc -std=c99 % -o %< && ./%< <CR>
+	imap <F1> <Esc>:w<CR>:!mycc -std=c99 -Wall -enable-auto-import % -g -o %< && ./%< <CR>
+	map <F1> <Esc>:w<CR>:!mycc -std=c99 -Wall -enable-auto-import % -g -o %< && ./%< <CR>
+	"
+	"imap <D-j> <Esc>ji
+	"imap <D-k> <Esc>ki
+	"imap <D-l> <Esc>li
+	"imap <D-h> <Esc>hi
 elseif has('win32')
-	imap <F1> <Esc>:w<CR>:!gcc -std=c99 -Wl,-enable-auto-import % -g -o %<.exe && %<.exe<CR>
-	map <F1> <Esc>:w<CR>:!gcc -std=c99 -Wl,-enable-auto-import % -g -o %<.exe && %<.exe<CR>
+	imap <F1> <Esc>:w<CR>:!gcc -std=c99 -Wl,--enable-auto-import % -g -o %<.exe && %<.exe<CR>
+	map <F1> <Esc>:w<CR>:!gcc -std=c99 -Wl,--enable-auto-import % -g -o %<.exe && %<.exe<CR>
+	"
+	inoremap <C-h> <Left>
+	inoremap <C-j> <Down>
+	inoremap <C-k> <Up>
+	inoremap <C-l> <Right>
+else
+	imap <F1> <Esc>:w<CR>:!gcc -std=c99 -lpthread -Wall % -g -o %< && %< <CR>
+	map <F1> <Esc>:w<CR>:!gcc -std=c99 -lpthread -Wall % -g -o %< && %< <CR>
 endif
-imap <C-D> <Esc>cc
-imap jk <Esc>
 
-imap <D-j> <Esc>ji
-imap <D-k> <Esc>ki
-imap <D-l> <Esc>li
-imap <D-h> <Esc>hi
+imap jk <Esc>
 
 "循环切换相对/绝对行号 
 function! ToggleLine()
@@ -224,4 +281,17 @@ function! ToggleLine()
 		set rnu
 	endif
 endfunc
-map <F5> <Esc>:call ToggleLine()<CR>
+map <F5> :call ToggleLine()<CR>
+imap <F5> <Esc>:call ToggleLine()<CR>
+
+"新建tab
+imap <C-T> <Esc>:tabnew<CR>
+nmap <C-T> :tabnew<CR>
+"切换tab
+imap <C-Left> <Esc>:tabp<CR>
+imap <C-Right> <Esc>:tabn<CR>
+nmap <C-Left> :tabp<CR>
+nmap <C-Right> :tabn<CR>
+"关闭tab
+"imap <C-W> <Esc>:tabclose<CR>
+"nmap <C-W> :tabclose<CR>
