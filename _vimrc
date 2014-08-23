@@ -4,56 +4,57 @@
 "开始使用Vundle的必须配置
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-Bundle 'gmarik/vundle'
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'gmarik/vundle'
 
 "airline 美化命令行
-Bundle 'bling/vim-airline'
+Plugin 'bling/vim-airline'
 let g:airline_extensions_tabline_enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'molokai'
 
 "快速移动
-Bundle 'Lokaltog/vim-easymotion'
+Plugin 'Lokaltog/vim-easymotion'
 "let g:EasyMotion_leader_key = '<Leader>'
 let g:EasyMotion_leader_key = ';'
 
 "NERD 目录浏览器
-Bundle 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdtree'
 map <Leader>o :NERDTreeToggle<CR>
 
 "NERD 注释
-Bundle 'The-NERD-Commenter'
+Plugin 'The-NERD-Commenter'
 
 "查找文件
-Bundle 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 
 "自动生成代码
-Bundle 'UltiSnips'
+Plugin 'UltiSnips'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " Markdown
-Bundle 'plasticboy/vim-markdown'
+Plugin 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled=1
 
 "让代码更加易于纵向排版，以=或,符号对齐
-Bundle 'Tabular'
+Plugin 'Tabular'
 
 "自动闭合括号
-Bundle 'Townk/vim-autoclose'
+Plugin 'Townk/vim-autoclose'
 let g:AutoClosePairs_del = "`"
 
 if has('gui_macvim')
-	Bundle 'Rip-Rip/clang_complete'
+	Plugin 'Rip-Rip/clang_complete'
 	let g:clang_auto_select = 1
 	let g:clang_complete_auto = 1
 endif
 
+call vundle#end()
 filetype plugin indent on
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
