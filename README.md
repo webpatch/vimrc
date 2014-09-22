@@ -1,5 +1,4 @@
 vim
 ===
-11df
-asdf
-asdfasdf
+.vimrc Linux
+_vimrc Windows/Mac
