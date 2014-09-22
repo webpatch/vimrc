@@ -1,4 +1,4 @@
 vim
 ===
-.vimrc Linux
+.vimrc Linux 
 _vimrc Windows/Mac
