@@ -31,11 +31,13 @@ Plugin 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 
-"自动生成代码
-Plugin 'UltiSnips'
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+if has("gui_running")
+	"自动生成代码
+	Plugin 'UltiSnips'
+	let g:UltiSnipsExpandTrigger="<tab>"
+	let g:UltiSnipsJumpForwardTrigger="<tab>"
+	let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+endif
 
 " Markdown
 Plugin 'plasticboy/vim-markdown'
@@ -78,8 +80,10 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-source $VIMRUNTIME/mswin.vim
-behave mswin
+if has("gui_running")
+	source $VIMRUNTIME/mswin.vim
+	behave mswin
+endif
 " 插入模式输入中文完毕回到普通模式时禁用输入法
 "se imd
 "au InsertEnter * se imd
@@ -122,9 +126,11 @@ else
 endif
 let &termencoding=&encoding
 " 解决菜单乱码
-set langmenu=zh_CN.utf-8
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
+if has("gui_running")
+	set langmenu=zh_CN.utf-8
+	source $VIMRUNTIME/delmenu.vim
+	source $VIMRUNTIME/menu.vim
+endif
 " 解决consle输出乱码
 language messages zh_CN.utf-8
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -132,18 +138,20 @@ language messages zh_CN.utf-8
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set lines=45
 set columns=120
-"启用鼠标
-if has('mouse')
-  set mouse=a
+if has("gui_running")
+	"启用鼠标
+	if has('mouse')
+	  set mouse=a
+	endif
+	" 键入时隐藏鼠标
+	set mousehide
+	" 隐藏工具栏
+	set guioptions-=T
+	" 隐藏菜单栏
+	set guioptions-=m
+	" 窗口最大化
+	"au GUIEnter * simalt ~x 
 endif
-" 键入时隐藏鼠标
-set mousehide
-" 隐藏工具栏
-set guioptions-=T
-" 隐藏菜单栏
-set guioptions-=m
-" 窗口最大化
-"au GUIEnter * simalt ~x 
 " 语法高亮
 syntax enable
 syntax on
